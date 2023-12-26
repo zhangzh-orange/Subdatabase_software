@@ -2,6 +2,9 @@ import tkinter as tk
 from tkinter import filedialog
 import pandas as pd
 from Bio import SeqIO
+import logging
+
+logging.basicConfig(filename="app.log",level=logging.DEBUG)
 
 # Constants
 ANALYZER_MAXQUANT = "MaxQuant"
