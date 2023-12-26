@@ -11,84 +11,64 @@ def error_back():
         restart()
         error_back_window.destroy()
 
-<<<<<<< HEAD
     error_label = tk.Label(error_back_window, text="Error in data identification, please restart with\n other data or contact the author.", width=50)
     error_label.pack()
 
     button_restart = tk.Button(error_back_window, text="Restart", command=restart_and_close, height=1, width=10)
-=======
-    error_label = tk.Label(error_back_window, text="Error in data identification, \nplease restart with other data \nor contact the author.")
-    error_label.pack()
+    button_restart.pack(pady=(10,10), padx=(15, 20))
 
-    button_restart = tk.Button(error_back_window, text="Restart", command=restart_and_close, height=1, width=20)
->>>>>>> 231326bf7e6f07e29833babd1486d60f5a1228d4
-    button_restart.pack(pady=(5, 15), padx=(15, 20))
+def show_error_message(error_message):
+    """Show error message"""
+    error_window = tk.Toplevel(root)
+    error_window.title("Error")
+
+    error_label = tk.Label(error_window, text=error_message, wraplength=300)
+    error_label.pack(padx=(20,20),pady=(5, 15))
+
+    button_ok = tk.Button(error_window, text="OK", command=error_window.destroy, height=1, width=10)
+    button_ok.pack(pady=(5, 15), padx=(15, 20))
 
 
 def show_asking_window():
-    protein_groups_path = entry_protein_groups.get()
-    df = pd.read_table(protein_groups_path, sep="\t")
-    if "Majority protein IDs" in df.columns and "Accession" not in df.columns:
-        analyzer_software = "MaxQuant"
-    elif "Majority protein IDs" not in df.columns and "Accession" in df.columns:
-        analyzer_software = "Thermo Proteome Discoverer"
+    try:
+        protein_groups_path = entry_protein_groups.get()
+        df = pd.read_table(protein_groups_path, sep="\t")
+        if "Majority protein IDs" in df.columns and "Accession" not in df.columns:
+            analyzer_software = "MaxQuant"
+        elif "Majority protein IDs" not in df.columns and "Accession" in df.columns:
+            analyzer_software = "Thermo Proteome Discoverer"
 
-    asking_window = tk.Toplevel(root)
-    asking_window.title("Confirm")
-<<<<<<< HEAD
-    asking_window.geometry("100+200")
+        asking_window = tk.Toplevel(root)
+        asking_window.title("Confirm")
 
-    def yes_action():
-        asking_window.destroy()
-        process_files("Majority protein IDs" if analyzer_software == "MaxQuant" else "Accession")
-        
+        def yes_action():
+            asking_window.destroy()
+            process_files("Majority protein IDs" if analyzer_software == "MaxQuant" else "Accession")
+            
 
-    def no_action():
-        asking_window.destroy()
-        error_back()
-        
+        def no_action():
+            asking_window.destroy()
+            error_back()
+            
 
-    def not_sure_action():
-        asking_window.destroy()
-        process_files("Majority protein IDs" if analyzer_software == "MaxQuant" else "Accession")
-        
+        def not_sure_action():
+            asking_window.destroy()
+            process_files("Majority protein IDs" if analyzer_software == "MaxQuant" else "Accession")
+            
 
-    asking_label = tk.Label(asking_window, text=f"Do this result file from {analyzer_software}")
-    asking_label.grid(row=0, column=1, columnspan=3) # 横跨3列
+        asking_label = tk.Label(asking_window, text=f"Do this result file from {analyzer_software}")
+        asking_label.grid(row=0, column=1, columnspan=3) # 横跨3列
 
-    button1 = tk.Button(asking_window, text="Yes", command=yes_action, width=15)
-    button1.grid(row=1, column=1, pady=(5, 15), padx=(15, 20))
+        button1 = tk.Button(asking_window, text="Yes", command=yes_action, width=15)
+        button1.grid(row=1, column=1, pady=(5, 15), padx=(15, 20))
 
-    button2 = tk.Button(asking_window, text="No", command=no_action, width=15)
-    button2.grid(row=1, column=2, pady=(5, 15), padx=(15, 20))
+        button2 = tk.Button(asking_window, text="No", command=no_action, width=15)
+        button2.grid(row=1, column=2, pady=(5, 15), padx=(15, 20))
 
-    button3 = tk.Button(asking_window, text="Not Sure", command=not_sure_action, width=15)
-=======
-
-    def yes_action():
-        process_files("Majority protein IDs" if analyzer_software == "MaxQuant" else "Accession")
-        asking_window.destroy()
-
-    def no_action():
-        error_back()
-        asking_window.destroy()
-
-    def not_sure_action():
-        process_files("Majority protein IDs" if analyzer_software == "MaxQuant" else "Accession")
-        asking_window.destroy()
-
-    asking_label = tk.Label(asking_window, text=f"Do this result file from {analyzer_software}")
-    asking_label.grid(row=0,column=2)
-
-    button1 = tk.Button(asking_window, text="Yes", command=yes_action)
-    button1.grid(row=1, column=1, pady=(5, 15), padx=(15, 20))
-
-    button2 = tk.Button(asking_window, text="No", command=no_action)
-    button2.grid(row=1, column=2, pady=(5, 15), padx=(15, 20))
-
-    button3 = tk.Button(asking_window, text="Not Sure", command=not_sure_action)
->>>>>>> 231326bf7e6f07e29833babd1486d60f5a1228d4
-    button3.grid(row=1, column=3, pady=(5, 15), padx=(15, 20))
+        button3 = tk.Button(asking_window, text="Not Sure", command=not_sure_action, width=15)
+        button3.grid(row=1, column=3, pady=(5, 15), padx=(15, 20))
+    except Exception as e:
+        show_error_message(f"An error occurred: {str(e)}")
 
     
 
